@@ -52,12 +52,12 @@ const Dashboard = ({ setActivePage }) => {
       <div style={styles.pageHeader}>
         <div>
           <h1 style={styles.pageTitle}>
-            {userType === 'candidate' ? 'Candidate Dashboard' : 'Employer Workspace'}
+            {userType === 'candidate' ? 'Student Dashboard' : 'Recruiter Workspace'}
           </h1>
           <p style={styles.pageSubtitle}>
             {userType === 'candidate'
-              ? 'Manage your job applications and saved bookmarks.'
-              : 'Review applicants, screen credentials, and update pipeline stages.'}
+              ? 'Track your placement applications and saved opportunities.'
+              : 'Review campus applicants, shortlist candidates, and manage drives.'}
           </p>
         </div>
       </div>
@@ -176,7 +176,7 @@ const Dashboard = ({ setActivePage }) => {
           <div style={styles.sectionHeaderRow}>
             <h2 style={styles.sectionTitle}>Review Candidates ({applications.length})</h2>
             <button onClick={() => setActivePage('post-job')} className="btn btn-primary" style={{ fontSize: '0.88rem' }}>
-              <UserPlus size={16} /> Post a New Role
+              <UserPlus size={16} /> Publish a Campus Drive
             </button>
           </div>
 

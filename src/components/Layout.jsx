@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { JobContext } from '../context/JobContext';
-import { Sun, Moon, Briefcase, PlusCircle, LayoutDashboard, Menu, X, ArrowRight } from 'lucide-react';
+import { Sun, Moon, Briefcase, PlusCircle, LayoutDashboard, GraduationCap, Menu, X, ArrowRight } from 'lucide-react';
 
 const Layout = ({ children, activePage, setActivePage }) => {
   const { userType, toggleUserType } = useContext(JobContext);
@@ -18,6 +18,7 @@ const Layout = ({ children, activePage, setActivePage }) => {
 
   const navItems = [
     { id: 'home', label: 'Explore', icon: Briefcase },
+    { id: 'campus', label: 'Campus Placement', icon: GraduationCap },
     { id: 'jobs', label: 'Jobs', icon: Briefcase },
     ...(userType === 'employer'
       ? [{ id: 'post-job', label: 'Post Job', icon: PlusCircle }]
@@ -73,7 +74,7 @@ const Layout = ({ children, activePage, setActivePage }) => {
                   color: userType === 'candidate' ? '#ffffff' : 'var(--text-secondary)'
                 }}
               >
-                Candidate
+                Student
               </button>
               <button
                 onClick={toggleUserType}
@@ -83,7 +84,7 @@ const Layout = ({ children, activePage, setActivePage }) => {
                   color: userType === 'employer' ? '#ffffff' : 'var(--text-secondary)'
                 }}
               >
-                Employer
+                Recruiter
               </button>
             </div>
 
@@ -164,7 +165,7 @@ const Layout = ({ children, activePage, setActivePage }) => {
             <div style={styles.footerLinkCol}>
               <h4 style={styles.footerHeader}>Role</h4>
               <span style={styles.footerLink} onClick={toggleUserType}>
-                Active: {userType === 'candidate' ? 'Candidate Mode' : 'Employer Mode'}
+                Active: {userType === 'candidate' ? 'Student Mode' : 'Recruiter Mode'}
               </span>
               <span style={styles.footerLink} onClick={toggleTheme}>
                 Toggle {theme === 'dark' ? 'Light Theme' : 'Dark Theme'}

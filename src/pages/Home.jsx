@@ -9,10 +9,10 @@ const Home = ({ setActivePage, setSearchFilters }) => {
 
   // Categories metadata
   const categories = [
-    { name: 'Tech', count: jobs.filter(j => j.category === 'Tech').length, icon: Briefcase, color: 'var(--accent)' },
-    { name: 'Design', count: jobs.filter(j => j.category === 'Design').length, icon: TrendingUp, color: '#f24e1e' },
-    { name: 'Product', count: jobs.filter(j => j.category === 'Product').length, icon: Users, color: '#06b6d4' },
-    { name: 'Marketing', count: jobs.filter(j => j.category === 'Marketing').length, icon: Building, color: '#f59e0b' }
+    { name: 'Computer Science', count: jobs.filter(j => j.eligibleBranches?.includes('Computer Science')).length, icon: Briefcase, color: 'var(--accent)' },
+    { name: 'Electronics', count: jobs.filter(j => j.eligibleBranches?.includes('Electronics')).length, icon: TrendingUp, color: '#f24e1e' },
+    { name: 'Mechanical', count: jobs.filter(j => j.eligibleBranches?.includes('Mechanical')).length, icon: Users, color: '#06b6d4' },
+    { name: 'Information Technology', count: jobs.filter(j => j.eligibleBranches?.includes('Information Technology')).length, icon: Building, color: '#f59e0b' }
   ];
 
   // Get featured jobs
@@ -24,7 +24,11 @@ const Home = ({ setActivePage, setSearchFilters }) => {
       query: searchQuery,
       location: locationQuery,
       category: '',
-      type: ''
+      type: '',
+      branch: '',
+      batch: '',
+      placementType: '',
+      onCampusOnly: false
     });
     setActivePage('jobs');
   };
@@ -33,15 +37,14 @@ const Home = ({ setActivePage, setSearchFilters }) => {
     setSearchFilters({
       query: '',
       location: '',
-      category: categoryName,
-      type: ''
+      category: '',
+      type: '',
+      branch: categoryName,
+      batch: '',
+      placementType: '',
+      onCampusOnly: false
     });
     setActivePage('jobs');
-  };
-
-  const handleJobClick = (jobId) => {
-    // Set active job in context
-    const { setActiveJobId } = useContext(JobContext); // wait, we can't call hook conditionally, let's pass state or import context properly
   };
 
   return (
@@ -53,11 +56,11 @@ const Home = ({ setActivePage, setSearchFilters }) => {
             🚀 The Developer Job Hub
           </div>
           <h1 style={styles.heroTitle}>
-            Discover the Web's <br />
-            <span style={styles.gradientText}>Premium Tech Jobs</span>
+            Campus Placement Made <br />
+            <span style={styles.gradientText}>Smarter & Faster</span>
           </h1>
           <p style={styles.heroSubtitle}>
-            HireSphere connects world-class developers with remote-first, high-growth engineering teams. Apply in seconds with our multi-step wizard.
+            HireSphere helps students and recruiters run placement drives, match eligible branches and batches, and manage applications from campus to company.
           </p>
 
           {/* Search Bar Form */}
@@ -108,6 +111,61 @@ const Home = ({ setActivePage, setSearchFilters }) => {
         </div>
       </section>
 
+      {/* Campus Drives Section */}
+      <section style={styles.section}>
+        <div style={styles.sectionHeader}>
+          <div>
+            <h2 style={styles.sectionTitle}>Campus Drives</h2>
+            <p style={styles.sectionSubtitle}>Explore the latest placement drives for eligible branches and batches.</p>
+          </div>
+          <button
+            onClick={() => {
+              setSearchFilters({ query: '', location: '', category: '', type: '', branch: '', batch: '', placementType: '', onCampusOnly: true });
+              setActivePage('campus');
+            }}
+            className="btn btn-secondary"
+            style={styles.viewAllBtn}
+          >
+            View On-campus Drives
+          </button>
+        </div>
+
+        <div style={styles.driveGrid}>
+          {jobs.filter(job => job.placementType === 'On-Campus' || job.driveDate).slice(0, 3).map((job) => (
+            <div key={job.id} style={styles.driveCard} className="glass-card glass-card-hover animate-slide-up" onClick={() => {
+              localStorage.setItem('hiresphere_activejobid', job.id);
+              setSearchFilters({ query: '', location: '', category: '', type: '', branch: '', batch: '', placementType: '', onCampusOnly: false });
+              setActivePage('jobs');
+            }}>
+              <div style={styles.driveCardTop}>
+                <div style={{ ...styles.companyLogo, backgroundColor: job.logoBg }}>
+                  {job.logoText}
+                </div>
+                <span className="tag tag-accent" style={styles.jobTypeTag}>{job.placementType || 'On-Campus'}</span>
+              </div>
+              <div>
+                <h3 style={styles.jobTitle}>{job.title}</h3>
+                <p style={styles.companyName}>{job.company}</p>
+              </div>
+              <div style={styles.driveMeta}>
+                <span>{job.location}</span>
+                <span>Batch {job.eligibleBatch || 'Any'}</span>
+              </div>
+              <div style={styles.driveTags}>
+                {job.eligibleBranches?.slice(0, 3).map((branch) => (
+                  <span key={branch} className="tag tag-info" style={styles.driveTagItem}>{branch}</span>
+                ))}
+              </div>
+              {job.driveDate && (
+                <div style={styles.driveFooter}>
+                  <span className="tag tag-success">Drive on {new Date(job.driveDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Categories Section */}
       <section style={styles.section}>
         <h2 style={styles.sectionTitle}>Browse by Department</h2>
@@ -145,7 +203,16 @@ const Home = ({ setActivePage, setSearchFilters }) => {
           </div>
           <button
             onClick={() => {
-              setSearchFilters({ query: '', location: '', category: '', type: '' });
+              setSearchFilters({
+                query: '',
+                location: '',
+                category: '',
+                type: '',
+                branch: '',
+                batch: '',
+                placementType: '',
+                onCampusOnly: false
+              });
               setActivePage('jobs');
             }}
             style={styles.viewAllBtn}
@@ -372,6 +439,47 @@ const styles = {
   },
   categoryArrow: {
     transition: 'transform var(--transition-fast)'
+  },
+  driveGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gap: '20px',
+    marginTop: '24px'
+  },
+  driveCard: {
+    padding: '24px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+    minHeight: '260px',
+    cursor: 'pointer'
+  },
+  driveCardTop: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: '12px'
+  },
+  driveMeta: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    gap: '12px',
+    color: 'var(--text-secondary)',
+    fontSize: '0.9rem'
+  },
+  driveTags: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '8px'
+  },
+  driveTagItem: {
+    fontSize: '0.72rem',
+    padding: '4px 10px'
+  },
+  driveFooter: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    gap: '8px'
   },
   featuredGrid: {
     display: 'grid',

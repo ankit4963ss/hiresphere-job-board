@@ -62,6 +62,12 @@ export const JobProvider = ({ children }) => {
       logoBg: newJob.logoBg || '#4F46E5',
       logoText: newJob.company ? newJob.company.charAt(0).toUpperCase() : 'J',
       skills: Array.isArray(newJob.skills) ? newJob.skills : newJob.skills.split(',').map(s => s.trim()).filter(Boolean),
+      eligibleBranches: Array.isArray(newJob.eligibleBranches)
+        ? newJob.eligibleBranches
+        : newJob.eligibleBranches?.split(',').map(s => s.trim()).filter(Boolean) || [],
+      eligibleBatch: newJob.eligibleBatch || '',
+      placementType: newJob.placementType || 'Off-Campus',
+      driveDate: newJob.driveDate || '',
       responsibilities: Array.isArray(newJob.responsibilities) ? newJob.responsibilities : newJob.responsibilities.split('\n').map(r => r.trim()).filter(Boolean),
       requirements: Array.isArray(newJob.requirements) ? newJob.requirements : newJob.requirements.split('\n').map(r => r.trim()).filter(Boolean),
       benefits: Array.isArray(newJob.benefits) ? newJob.benefits : newJob.benefits.split('\n').map(b => b.trim()).filter(Boolean),

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, DollarSign, Clock, CheckCircle, Bookmark, BookmarkCheck, Calendar } from 'lucide-react';
+import { MapPin, DollarSign, Clock, CheckCircle, Bookmark, BookmarkCheck, Calendar, UserCheck } from 'lucide-react';
 
 const JobDetail = ({ job, isBookmarked, onBookmarkToggle, hasApplied, onApplyClick }) => {
   if (!job) {
@@ -97,11 +97,40 @@ const JobDetail = ({ job, isBookmarked, onBookmarkToggle, hasApplied, onApplyCli
               <span style={styles.metaValue}>{job.type} / {job.experience}</span>
             </div>
           </div>
+          <div style={styles.metaBox}>
+            <UserCheck size={16} color="var(--accent)" />
+            <div>
+              <span style={styles.metaLabel}>Placement Type</span>
+              <span style={styles.metaValue}>{job.placementType || 'Off-Campus'}</span>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Main Content Body */}
       <div style={styles.detailBody}>
+        {/* Job Fit Section */}
+        <div style={styles.section}>
+          <h3 style={styles.sectionHeading}>Eligible Candidates</h3>
+          <div style={styles.badgeRow}>
+            {job.eligibleBranches?.map((branch) => (
+              <span key={branch} className="tag tag-info" style={styles.badgeItem}>
+                {branch}
+              </span>
+            ))}
+            {job.eligibleBatch && (
+              <span className="tag tag-success" style={styles.badgeItem}>
+                Batch {job.eligibleBatch}
+              </span>
+            )}
+            {job.driveDate && (
+              <span className="tag tag-accent" style={styles.badgeItem}>
+                Drive on {formatDate(job.driveDate)}
+              </span>
+            )}
+          </div>
+        </div>
+
         {/* Description Section */}
         <div style={styles.section}>
           <h3 style={styles.sectionHeading}>About the Opportunity</h3>

@@ -13,6 +13,10 @@ const PostJob = ({ setActivePage }) => {
     category: 'Tech',
     location: 'Remote',
     type: 'Full-time',
+    placementType: 'Off-Campus',
+    eligibleBranches: '',
+    eligibleBatch: '2026',
+    driveDate: '',
     experience: 'Senior',
     salary: '',
     description: '',
@@ -219,6 +223,76 @@ const PostJob = ({ setActivePage }) => {
                       <option value="Internship">Internship</option>
                     </select>
                   </div>
+                </div>
+
+                <div style={styles.inputRow}>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label className="form-label">Job Type</label>
+                    <select
+                      name="type"
+                      value={formData.type}
+                      onChange={handleInputChange}
+                      className="input-field"
+                    >
+                      <option value="Full-time">Full-time</option>
+                      <option value="Part-time">Part-time</option>
+                      <option value="Contract">Contract</option>
+                      <option value="Internship">Internship</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label className="form-label">Placement Type</label>
+                    <select
+                      name="placementType"
+                      value={formData.placementType}
+                      onChange={handleInputChange}
+                      className="input-field"
+                    >
+                      <option value="On-Campus">On-Campus</option>
+                      <option value="Off-Campus">Off-Campus</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style={styles.inputRow}>
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label className="form-label">Eligible Branches</label>
+                    <input
+                      type="text"
+                      name="eligibleBranches"
+                      value={formData.eligibleBranches}
+                      onChange={handleInputChange}
+                      placeholder="Computer Science, Electronics, IT"
+                      className="input-field"
+                    />
+                  </div>
+
+                  <div className="form-group" style={{ flex: 1 }}>
+                    <label className="form-label">Batch</label>
+                    <select
+                      name="eligibleBatch"
+                      value={formData.eligibleBatch}
+                      onChange={handleInputChange}
+                      className="input-field"
+                    >
+                      <option value="2024">2024</option>
+                      <option value="2025">2025</option>
+                      <option value="2026">2026</option>
+                      <option value="2027">2027</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Drive Date</label>
+                  <input
+                    type="date"
+                    name="driveDate"
+                    value={formData.driveDate}
+                    onChange={handleInputChange}
+                    className="input-field"
+                  />
                 </div>
 
                 <div style={styles.inputRow}>

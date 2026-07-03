@@ -17,8 +17,11 @@ const Jobs = ({ searchFilters, setSearchFilters }) => {
   const [location, setLocation] = useState(searchFilters.location || '');
   const [category, setCategory] = useState(searchFilters.category || '');
   const [type, setType] = useState(searchFilters.type || '');
+  const [branch, setBranch] = useState(searchFilters.branch || '');
+  const [batch, setBatch] = useState(searchFilters.batch || '');
+  const [placementType, setPlacementType] = useState(searchFilters.placementType || '');
   const [experience, setExperience] = useState('');
-  const [remoteOnly, setRemoteOnly] = useState(false);
+  const [onCampusOnly, setOnCampusOnly] = useState(searchFilters.onCampusOnly || false);
 
   // Sync state if landing page filters change
   useEffect(() => {
@@ -26,6 +29,10 @@ const Jobs = ({ searchFilters, setSearchFilters }) => {
     setLocation(searchFilters.location || '');
     setCategory(searchFilters.category || '');
     setType(searchFilters.type || '');
+    setBranch(searchFilters.branch || '');
+    setBatch(searchFilters.batch || '');
+    setPlacementType(searchFilters.placementType || '');
+    setOnCampusOnly(searchFilters.onCampusOnly || false);
   }, [searchFilters]);
 
   // Filter listings
@@ -38,10 +45,23 @@ const Jobs = ({ searchFilters, setSearchFilters }) => {
     const matchesLocation = job.location.toLowerCase().includes(location.toLowerCase());
     const matchesCategory = category ? job.category === category : true;
     const matchesType = type ? job.type === type : true;
+    const matchesBranch = branch ? job.eligibleBranches?.includes(branch) : true;
+    const matchesBatch = batch ? job.eligibleBatch === batch : true;
+    const matchesPlacementType = placementType ? job.placementType === placementType : true;
     const matchesExperience = experience ? job.experience === experience : true;
-    const matchesRemote = remoteOnly ? job.location.toLowerCase().includes('remote') : true;
+    const matchesOnCampus = onCampusOnly ? job.placementType?.toLowerCase().includes('on-campus') || job.location.toLowerCase().includes('campus') : true;
 
-    return matchesQuery && matchesLocation && matchesCategory && matchesType && matchesExperience && matchesRemote;
+    return (
+      matchesQuery &&
+      matchesLocation &&
+      matchesCategory &&
+      matchesType &&
+      matchesBranch &&
+      matchesBatch &&
+      matchesPlacementType &&
+      matchesExperience &&
+      matchesOnCampus
+    );
   });
 
   // Active Job selection helper
@@ -59,9 +79,21 @@ const Jobs = ({ searchFilters, setSearchFilters }) => {
     setLocation('');
     setCategory('');
     setType('');
+    setBranch('');
+    setBatch('');
+    setPlacementType('');
     setExperience('');
-    setRemoteOnly(false);
-    setSearchFilters({ query: '', location: '', category: '', type: '' });
+    setOnCampusOnly(false);
+    setSearchFilters({
+      query: '',
+      location: '',
+      category: '',
+      type: '',
+      branch: '',
+      batch: '',
+      placementType: '',
+      onCampusOnly: false
+    });
   };
 
   const handleJobCardClick = (jobId) => {
@@ -146,6 +178,66 @@ const Jobs = ({ searchFilters, setSearchFilters }) => {
                 <option value="Contract">Contract</option>
                 <option value="Internship">Internship</option>
               </select>
+            </div>
+
+            {/* Branch Filter */}
+            <div className="form-group">
+              <label className="form-label">Eligible Branch</label>
+              <select
+                value={branch}
+                onChange={(e) => setBranch(e.target.value)}
+                className="input-field"
+              >
+                <option value="">All Branches</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Mechanical">Mechanical</option>
+              </select>
+            </div>
+
+            {/* Batch Filter */}
+            <div className="form-group">
+              <label className="form-label">Eligible Batch</label>
+              <select
+                value={batch}
+                onChange={(e) => setBatch(e.target.value)}
+                className="input-field"
+              >
+                <option value="">All Batches</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+              </select>
+            </div>
+
+            {/* Placement Type Filter */}
+            <div className="form-group">
+              <label className="form-label">Placement Type</label>
+              <select
+                value={placementType}
+                onChange={(e) => setPlacementType(e.target.value)}
+                className="input-field"
+              >
+                <option value="">All Placement Types</option>
+                <option value="On-Campus">On-Campus</option>
+                <option value="Off-Campus">Off-Campus</option>
+              </select>
+            </div>
+
+            {/* On-Campus Only Checkbox */}
+            <div style={styles.checkboxGroup}>
+              <input
+                type="checkbox"
+                id="onCampusOnlyCheckbox"
+                checked={onCampusOnly}
+                onChange={(e) => setOnCampusOnly(e.target.checked)}
+                style={styles.checkbox}
+              />
+              <label htmlFor="onCampusOnlyCheckbox" style={styles.checkboxLabel}>
+                Show only on-campus drives
+              </label>
             </div>
 
             {/* Experience Level Filter */}

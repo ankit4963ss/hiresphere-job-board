@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { JobProvider } from './context/JobContext';
 import Layout from './components/Layout';
 import Home from './pages/Home';
+import Campus from './pages/Campus';
 import Jobs from './pages/Jobs';
 import PostJob from './pages/PostJob';
 import Dashboard from './pages/Dashboard';
@@ -12,7 +13,11 @@ function App() {
     query: '',
     location: '',
     category: '',
-    type: ''
+    type: '',
+    branch: '',
+    batch: '',
+    placementType: '',
+    onCampusOnly: false
   });
 
   return (
@@ -20,6 +25,12 @@ function App() {
       <Layout activePage={activePage} setActivePage={setActivePage}>
         {activePage === 'home' && (
           <Home
+            setActivePage={setActivePage}
+            setSearchFilters={setSearchFilters}
+          />
+        )}
+        {activePage === 'campus' && (
+          <Campus
             setActivePage={setActivePage}
             setSearchFilters={setSearchFilters}
           />
