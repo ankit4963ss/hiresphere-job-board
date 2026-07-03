@@ -21,6 +21,7 @@ const Jobs = ({ searchFilters, setSearchFilters }) => {
   const [batch, setBatch] = useState(searchFilters.batch || '');
   const [placementType, setPlacementType] = useState(searchFilters.placementType || '');
   const [experience, setExperience] = useState('');
+  const [remoteOnly, setRemoteOnly] = useState(false);
   const [onCampusOnly, setOnCampusOnly] = useState(searchFilters.onCampusOnly || false);
 
   // Sync state if landing page filters change
@@ -50,6 +51,7 @@ const Jobs = ({ searchFilters, setSearchFilters }) => {
     const matchesPlacementType = placementType ? job.placementType === placementType : true;
     const matchesExperience = experience ? job.experience === experience : true;
     const matchesOnCampus = onCampusOnly ? job.placementType?.toLowerCase().includes('on-campus') || job.location.toLowerCase().includes('campus') : true;
+    const matchesRemote = remoteOnly ? job.location.toLowerCase().includes('remote') : true;
 
     return (
       matchesQuery &&
@@ -60,7 +62,8 @@ const Jobs = ({ searchFilters, setSearchFilters }) => {
       matchesBatch &&
       matchesPlacementType &&
       matchesExperience &&
-      matchesOnCampus
+      matchesOnCampus &&
+      matchesRemote
     );
   });
 
@@ -83,6 +86,7 @@ const Jobs = ({ searchFilters, setSearchFilters }) => {
     setBatch('');
     setPlacementType('');
     setExperience('');
+    setRemoteOnly(false);
     setOnCampusOnly(false);
     setSearchFilters({
       query: '',
