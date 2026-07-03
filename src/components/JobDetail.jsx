@@ -37,16 +37,9 @@ const JobDetail = ({ job, isBookmarked, onBookmarkToggle, hasApplied, onApplyCli
 
         {/* Action Row */}
         <div style={styles.actionRow}>
-          {hasApplied ? (
-            <button style={styles.appliedBtn} disabled className="btn btn-secondary">
-              <CheckCircle size={18} />
-              Applied
-            </button>
-          ) : (
-            <button onClick={onApplyClick} className="btn btn-primary" style={styles.applyBtn}>
-              Apply Now
-            </button>
-          )}
+          <button onClick={onApplyClick} className="btn btn-primary" style={styles.applyBtn}>
+            {hasApplied ? 'Apply Again' : 'Apply Now'}
+          </button>
 
           <button
             onClick={() => onBookmarkToggle(job.id)}
