@@ -38,7 +38,7 @@ const JobDetail = ({ job, isBookmarked, onBookmarkToggle, hasApplied, onApplyCli
         {/* Action Row */}
         <div style={styles.actionRow}>
           <button onClick={onApplyClick} className="btn btn-primary" style={styles.applyBtn}>
-            {hasApplied ? 'Apply Again' : 'Apply Now'}
+            Apply
           </button>
 
           <button
